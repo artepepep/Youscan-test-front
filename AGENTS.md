@@ -107,8 +107,8 @@ Every slice must expose its supported public API through its root `index.ts`.
 Use explicit exports:
 
 ```ts
-export { CreateWidgetModal } from './ui/CreateWidgetModal';
-export type { CreateWidgetFormValues } from './model/create-widget.types';
+export { CreateWidgetModal } from "./ui/CreateWidgetModal";
+export type { CreateWidgetFormValues } from "./model/create-widget.types";
 ```
 
 Avoid wildcard exports when explicit exports are practical.
@@ -116,14 +116,14 @@ Avoid wildcard exports when explicit exports are practical.
 Import other slices through their public API:
 
 ```ts
-import { CreateWidgetModal } from '@/features/create-widget';
+import { CreateWidgetModal } from "@/features/create-widget";
 ```
 
 Do not import another slice's internal files:
 
 ```ts
 // Avoid
-import { CreateWidgetModal } from '@/features/create-widget/ui/CreateWidgetModal';
+import { CreateWidgetModal } from "@/features/create-widget/ui/CreateWidgetModal";
 ```
 
 Relative imports are allowed within the same slice. Use the `@/` alias for imports across slices. Avoid circular dependencies.
@@ -157,11 +157,11 @@ Example:
 
 ```ts
 type DashboardWidget =
-  | { id: string; type: 'line'; data: LineChartData }
-  | { id: string; type: 'bar'; data: BarChartData }
-  | { id: string; type: 'stacked-bar'; data: StackedBarChartData }
-  | { id: string; type: 'pie'; data: PieChartData }
-  | { id: string; type: 'text'; data: TextWidgetData };
+  | { id: string; type: "line"; data: LineChartData }
+  | { id: string; type: "bar"; data: BarChartData }
+  | { id: string; type: "stacked-bar"; data: StackedBarChartData }
+  | { id: string; type: "pie"; data: PieChartData }
+  | { id: string; type: "text"; data: TextWidgetData };
 ```
 
 ## Data fetching and state
@@ -177,12 +177,19 @@ type DashboardWidget =
 
 ## Styling and UI
 
-- Follow the styling system already used by the project.
-- Keep slice-specific styles next to their components.
-- Reusable, business-independent primitives belong in `shared/ui`.
-- Do not move a component to `shared/ui` merely because two components look similar; it must have a stable generic responsibility.
-- Avoid duplicating layout, color, and spacing values when the project has design tokens.
-- Preserve responsive behavior and support narrow screens unless the product requirements explicitly exclude them.
+### shadcn/ui
+
+- Use shadcn/ui as the source of reusable UI primitives.
+- Place generated shadcn components in `src/shared/ui`.
+- Do not place shadcn components in `src/components/ui`.
+- Treat generated shadcn components as project-owned source code; they may be modified when required.
+- Keep shadcn primitives business-independent.
+- Do not add dashboard-specific behavior to components in `shared/ui`.
+- Compose shadcn primitives inside entity, feature, widget, and page slices.
+- Use Tailwind CSS for styling and follow the project's existing design tokens.
+- Use the `cn` utility from `@/shared/lib/utils` for conditional class names.
+- Before creating a custom primitive, check whether an appropriate shadcn component already exists.
+- Do not install large groups of unused shadcn components.
 
 ## Naming
 
