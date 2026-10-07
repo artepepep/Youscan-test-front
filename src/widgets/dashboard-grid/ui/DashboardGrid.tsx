@@ -40,7 +40,7 @@ export function DashboardGrid() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-6 lg:grid-cols-3 sm:grid-cols-2">
       {widgets.map((widget) => (
         <WidgetRenderer key={widget.id} widget={widget} />
       ))}

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getWidgets } from "../api/get-widgets";
+import { getWidgets } from "../api/get-widgets/get-widgets";
 import { widgetKeys } from "./widget.keys";
 
 export function useWidgets() {

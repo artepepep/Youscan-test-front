@@ -17,6 +17,19 @@ type PieChartProps = {
 export function PieChart({ widget }: PieChartProps) {
   const { data, total, config } = preparePieChartData(widget.data.rows);
 
+  if (data.length === 0 || total === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{widget.title}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex h-72 items-center justify-center text-sm text-muted-foreground">
+          No chart data available.
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>

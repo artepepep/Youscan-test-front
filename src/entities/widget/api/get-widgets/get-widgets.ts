@@ -1,6 +1,6 @@
 import { API_URL } from "@/shared/config/api";
-import { parseWidgets } from "./parse-widgets";
-import type { Widget } from "../model/widget.types";
+import { parseWidgets } from "../get-widgets/parse-widgets";
+import type { Widget } from "../../model/widget.types";
 
 export async function getWidgets(): Promise<Widget[]> {
   const response = await fetch(`${API_URL}/widgets`);

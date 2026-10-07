@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
 import type { Widget } from "../model/widget.types";
 import { LineChart } from "./line-chart/LineChart";
 import { PieChart } from "./pie-chart/PieChart";
+import { StackedChart } from "./stacked-chart/StackedChart";
 import { TextWidget } from "./text-widget/TextWidget";
 
 type WidgetRendererProps = {
@@ -17,8 +18,9 @@ export function WidgetRenderer({ widget }: WidgetRendererProps) {
       return <TextWidget widget={widget} />;
     case "pie":
       return <PieChart widget={widget} />;
-    case "bar":
     case "stacked-bar":
+      return <StackedChart widget={widget} />;
+    case "bar":
       return (
         <Card>
           <CardHeader>

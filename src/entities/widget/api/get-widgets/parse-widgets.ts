@@ -1,5 +1,5 @@
 import { isRecord } from "@/shared/lib/is-record";
-import type { ChartData, ChartRow, Widget } from "../model/widget.types";
+import type { ChartData, ChartRow, Widget } from "../../model/widget.types";
 
 function parseChartData(value: unknown): ChartData {
   if (!isRecord(value) || !Array.isArray(value.rows)) {
@@ -56,7 +56,11 @@ function parseWidget(value: unknown): Widget {
         throw new Error("Invalid text widget data");
       }
 
-      return { ...common, type: value.type, data: { content: value.data.content } };
+      return {
+        ...common,
+        type: value.type,
+        data: { content: value.data.content },
+      };
     default:
       throw new Error("Unsupported widget type");
   }
