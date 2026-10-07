@@ -1,6 +1,6 @@
 import { assertNever } from "@/shared/lib/assert-never";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
 import type { Widget } from "../model/widget.types";
+import { BarChart } from "./bar-chart/BarChart";
 import { LineChart } from "./line-chart/LineChart";
 import { PieChart } from "./pie-chart/PieChart";
 import { StackedChart } from "./stacked-chart/StackedChart";
@@ -21,16 +21,7 @@ export function WidgetRenderer({ widget }: WidgetRendererProps) {
     case "stacked-bar":
       return <StackedChart widget={widget} />;
     case "bar":
-      return (
-        <Card>
-          <CardHeader>
-            <CardTitle>{widget.title}</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            The {widget.type} renderer is not implemented yet.
-          </CardContent>
-        </Card>
-      );
+      return <BarChart widget={widget} />;
     default:
       return assertNever(widget, "Unsupported widget");
   }

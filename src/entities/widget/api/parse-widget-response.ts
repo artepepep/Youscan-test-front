@@ -1,5 +1,5 @@
 import { isRecord } from "@/shared/lib/is-record";
-import type { ChartData, ChartRow, Widget } from "../../model/widget.types";
+import type { ChartData, ChartRow, Widget } from "../model/widget.types";
 
 function parseChartData(value: unknown): ChartData {
   if (!isRecord(value) || !Array.isArray(value.rows)) {
@@ -25,7 +25,7 @@ function parseChartData(value: unknown): ChartData {
   return { rows };
 }
 
-function parseWidget(value: unknown): Widget {
+export function parseWidgetResponse(value: unknown): Widget {
   if (
     !isRecord(value) ||
     typeof value.id !== "string" ||
@@ -66,10 +66,10 @@ function parseWidget(value: unknown): Widget {
   }
 }
 
-export function parseWidgets(value: unknown): Widget[] {
+export function parseWidgetsResponse(value: unknown): Widget[] {
   if (!Array.isArray(value)) {
     throw new Error("Invalid widgets response");
   }
 
-  return value.map(parseWidget);
+  return value.map(parseWidgetResponse);
 }

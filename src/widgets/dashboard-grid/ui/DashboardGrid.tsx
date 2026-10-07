@@ -1,4 +1,7 @@
 import { useWidgets, WidgetRenderer } from "@/entities/widget";
+import { DeleteWidgetButton } from "@/features/delete-widget";
+import { EditTextWidgetButton } from "@/features/edit-text-widget";
+import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/Button";
 import { Card, CardContent } from "@/shared/ui/Card";
 import { Skeleton } from "@/shared/ui/Skeleton";
@@ -42,7 +45,23 @@ export function DashboardGrid() {
   return (
     <div className="grid gap-6 lg:grid-cols-3 sm:grid-cols-2">
       {widgets.map((widget) => (
-        <WidgetRenderer key={widget.id} widget={widget} />
+        <div
+          key={widget.id}
+          className={cn(
+            "relative min-w-0",
+            widget.type === "text"
+              ? "[&_[data-slot=card-header]]:pr-24"
+              : "[&_[data-slot=card-header]]:pr-14",
+          )}
+        >
+          <WidgetRenderer widget={widget} />
+          <div className="absolute top-3 right-3 flex items-center gap-1">
+            {widget.type === "text" && (
+              <EditTextWidgetButton widget={widget} />
+            )}
+            <DeleteWidgetButton widget={widget} />
+          </div>
+        </div>
       ))}
     </div>
   );

@@ -1,5 +1,5 @@
 import { API_URL } from "@/shared/config/api";
-import { parseWidgets } from "../get-widgets/parse-widgets";
+import { parseWidgetsResponse } from "../parse-widget-response";
 import type { Widget } from "../../model/widget.types";
 
 export async function getWidgets(): Promise<Widget[]> {
@@ -10,5 +10,5 @@ export async function getWidgets(): Promise<Widget[]> {
   }
 
   const data: unknown = await response.json();
-  return parseWidgets(data);
+  return parseWidgetsResponse(data);
 }
