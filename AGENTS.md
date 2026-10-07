@@ -75,7 +75,6 @@ Place code in the lowest suitable layer:
 - Put reusable business data, entity types, entity-specific requests, and entity UI in `entities`.
 - Put code in `shared` only when it is independent of the product domain.
 - Keep code used by one slice inside that slice.
-- Move code upward or into `shared` only after real reuse appears.
 
 Do not create global folders such as `components`, `hooks`, `services`, `utils`, `helpers`, or `types` at the root of `src`.
 
@@ -86,19 +85,19 @@ Avoid generic files such as `utils.ts`, `helpers.ts`, `common.ts`, or `constants
 The word `widget` has two meanings in this project:
 
 - The FSD `widgets` layer contains large interface sections, such as `dashboard-grid`.
-- A dashboard widget is a business entity and belongs to `entities/dashboard-widget`.
+- A dashboard widget is a business entity and belongs to `entities/widget`.
 
 Use these locations for dashboard functionality:
 
 ```text
 widgets/dashboard-grid/
-entities/dashboard-widget/
+entities/widget/
 features/create-widget/
 features/delete-widget/
 features/edit-text-widget/
 ```
 
-Chart and text rendering belong to `entities/dashboard-widget/ui`. User operations belong to the appropriate feature slice.
+Chart and text rendering belong to `entities/widget/ui`. User operations belong to the appropriate feature slice.
 
 ## Public APIs and imports
 
@@ -133,6 +132,7 @@ Relative imports are allowed within the same slice. Use the `@/` alias for impor
 - Use function components and hooks.
 - Do not use `React.FC`.
 - Keep components focused on one responsibility.
+- Consider extracting a custom hook when a component uses more than two or three React hooks, especially when those hooks implement one cohesive piece of behavior. Treat this as a maintainability signal rather than a strict numeric rule: keep simple, unrelated local state in the component, but move related state, effects, callbacks, and server interactions into a clearly named custom hook when doing so simplifies the component.
 - Keep local UI state close to the component that owns it.
 - Extract a custom hook when logic is reused or when extraction substantially clarifies a component.
 - Prefer composition over large components with many boolean props.
