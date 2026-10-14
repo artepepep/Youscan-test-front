@@ -52,7 +52,9 @@ export function LineChart({ widget }: LineChartProps) {
       </CardHeader>
 
       <CardContent>
-        <LineChartDateRange widgetId={widget.id} range={dateRange} />
+        {dateRange && (
+          <LineChartDateRange widgetId={widget.id} range={dateRange} />
+        )}
 
         <ChartContainer config={chartConfig} className="h-72 w-full">
           <RechartsLineChart

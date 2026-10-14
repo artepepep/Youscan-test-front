@@ -16,6 +16,8 @@ type DateRangeSelection = {
   to?: string;
 };
 
+const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
 export type LineChartDateRange = {
   from: string;
   to: string;
@@ -27,12 +29,23 @@ export type LineChartDateRange = {
   reset: () => void;
 };
 
+function isIsoDate(value: string): boolean {
+  if (!ISO_DATE_PATTERN.test(value)) {
+    return false;
+  }
+
+  const date = new Date(`${value}T00:00:00Z`);
+  return (
+    !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value
+  );
+}
+
 function getChartMetadata(rows: ChartRow[]) {
-  const dates = new Set<string>();
+  const labels = new Set<string>();
   const series = new Set<string>();
 
   for (const row of rows) {
-    dates.add(row.label);
+    labels.add(row.label);
 
     for (const [key, value] of Object.entries(row)) {
       if (key !== "label" && typeof value === "number") {
@@ -41,7 +54,8 @@ function getChartMetadata(rows: ChartRow[]) {
     }
   }
 
-  const sortedDates = Array.from(dates).sort();
+  const chartLabels = Array.from(labels);
+  const dates = chartLabels.every(isIsoDate) ? chartLabels.sort() : [];
   const seriesNames = Array.from(series);
   const chartConfig: ChartConfig = Object.fromEntries(
     seriesNames.map((name, index) => [
@@ -53,7 +67,7 @@ function getChartMetadata(rows: ChartRow[]) {
     ]),
   );
 
-  return { dates: sortedDates, series: seriesNames, chartConfig };
+  return { dates, series: seriesNames, chartConfig };
 }
 
 function isDateInRange(
@@ -72,6 +86,7 @@ export function useLineChart(rows: ChartRow[]) {
   const [selection, setSelection] = useState<DateRangeSelection>({});
   const firstDate = dates[0] ?? "";
   const lastDate = dates.at(-1) ?? "";
+  const hasDateRange = dates.length > 0;
   const from = isDateInRange(selection.from, firstDate, lastDate)
     ? selection.from
     : firstDate;
@@ -79,20 +94,27 @@ export function useLineChart(rows: ChartRow[]) {
     ? selection.to
     : lastDate;
   const displayedRows = useMemo(
-    () => rows.filter((row) => row.label >= from && row.label <= to),
-    [from, rows, to],
+    () =>
+      hasDateRange
+        ? rows.filter((row) => row.label >= from && row.label <= to)
+        : rows,
+    [from, hasDateRange, rows, to],
   );
 
-  const dateRange: LineChartDateRange = {
-    from,
-    to,
-    min: firstDate,
-    max: lastDate,
-    isFullRange: from === firstDate && to === lastDate,
-    setFrom: (date) => setSelection((current) => ({ ...current, from: date })),
-    setTo: (date) => setSelection((current) => ({ ...current, to: date })),
-    reset: () => setSelection({}),
-  };
+  const dateRange: LineChartDateRange | undefined = hasDateRange
+    ? {
+        from,
+        to,
+        min: firstDate,
+        max: lastDate,
+        isFullRange: from === firstDate && to === lastDate,
+        setFrom: (date) =>
+          setSelection((current) => ({ ...current, from: date })),
+        setTo: (date) =>
+          setSelection((current) => ({ ...current, to: date })),
+        reset: () => setSelection({}),
+      }
+    : undefined;
 
   return { displayedRows, series, chartConfig, dateRange };
 }

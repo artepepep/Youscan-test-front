@@ -71,7 +71,7 @@ npm run preview  # preview the production build locally
 
 ## Importing chart data
 
-The reusable import mechanism is exposed by the backend. CSV, XLSX, and XLS
+The reusable import mechanism is exposed by the backend. CSV and XLSX
 files are supported for line, bar, stacked-bar, and pie charts.
 
 For example, import a stacked-bar chart into the deployed dashboard:
